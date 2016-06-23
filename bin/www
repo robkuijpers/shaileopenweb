@@ -3,10 +3,11 @@
 /**
  * Module dependencies.
  */
-
+var fs = require('fs');
 var app = require('../server/app');
 var debug = require('debug')('shaileopenweb:server');
 var http = require('http');
+var spdy = require('spdy');
 
 /**
  * Get port from environment and store in Express.
@@ -16,10 +17,23 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
+ * Read certificate for SSL / HTTP/2
+ */
+var options = {
+    key: fs.readFileSync(__dirname + '/server.key'),
+    cert: fs.readFileSync(__dirname + '/server.crt')
+};
+
+/**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+//var server = http.createServer(app);
+
+/**
+ * Create HTTPS / HTTP/2 Server
+ */
+var server = spdy.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -86,5 +100,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  debug('HTTPS Listening on ' + bind);
 }

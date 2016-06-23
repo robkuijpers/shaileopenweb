@@ -1,6 +1,16 @@
-<script src="libs/angular2-polyfills.js"></script>
-<script src="libs/system.src.js"></script>
-<script src="libs/Rx.js"></script>
-<script src="libs/angular2.dev.js"></script>
-<script src="libs/router.dev.js"></script>
-<script src="scripts/app.js"></script> 
+    <div>Copyright RK</div>
+ 
+    <!-- Angular2 & Polyfill(s) for older browsers -->
+    <script src="libs/shim.min.js"></script>
+    <script src="libs/zone.js"></script>
+    <script src="libs/Reflect.js"></script>
+    <script src="libs/system.src.js"></script>
+
+    <!-- Material Design Lite -->
+    <script src="/libs/material.min.js"></script>
+
+    <!-- Configure SystemJS -->
+    <script src="systemjs.config.js"></script>
+    <script>
+      System.import('app').catch(function(err){ console.error(err); });
+    </script>
