@@ -76,8 +76,9 @@ gulp.task('imagemin', function() {
 // *** Copy fonts  ***
 // ***** Not used ***** 
 const fontFiles = [
+         'node_modules/roboto-font/scss/*.*',
          'node_modules/roboto-font/fonts/Roboto/roboto-*.*',
-         'node_modules/material-design-lite/fonts/material-design-icons/*.*'
+         'node_modules/material-design-icons/iconfont/*.*'
       ];
 const fontsDirOut = 'public/dist/fonts';
 
