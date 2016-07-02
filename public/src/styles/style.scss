@@ -1,11 +1,8 @@
 @import '../../../node_modules/material-design-lite/src/material-design-lite.scss';
+//@import 'login.scss';
 
-body {
-  padding: 100px;
-  font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
-  color: darkblue;
-}
-
-a {
-  color: #00B7FF;
+.mdl-navigation__link {
+    .material-icons {
+        margin-right: 12px;
+    }
 }

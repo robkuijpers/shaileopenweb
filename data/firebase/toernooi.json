@@ -1,0 +1,27 @@
+{
+  "dates" : {
+    "day1" : "12-07-2016",
+    "day2" : "13-07-2016",
+    "day3" : "14-07-2016"
+  },
+  "spelers" : {
+    "12345678" : {
+      "firstName" : "Rob",
+      "lastName" : "Kuijpers"
+    }
+  },
+  "users" : { 
+    "kuijpersr" : {
+      "userid" : "kuijpersr",
+      "password": "111",
+      "email" : "dekuijpers@gmail.com",
+      "role": "admin"
+    },
+    "kuijpers2" : {
+      "userid" : "kuijpers2",
+      "password": "111",
+      "email" : "dekuijpers@gmail.com",
+      "role": "user"
+    }
+  }
+}

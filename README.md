@@ -68,7 +68,7 @@ List process with port 3000 in use: lsof -i tcp:3000
 Fixed reloading browsers on change in client code.
 
 Next steps:
-    Add MDL icons + roboto fonts in node_modules and gulp.
+    Copy MDL icons + roboto fonts from node_modules to dist.
     Study SystemJS class loader.
     Study, configure and use AngularFire2.
     Study Angular2 Hero Editor Tutorial.
@@ -76,3 +76,28 @@ Next steps:
     Create login screen.
     Create responsive grid and menu.
     Minify .js and .css and cache hbs files for production release.
+
+
+AngularFire2 and Firebase
+
+    npm install angularfire2
+    npm install firebase
+    typings install dt~firebase --global
+
+
+
+<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-database.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBVWUl4Rdd_6ssjpJq41IZAYCR46VFF7oM",
+    authDomain: "toernooi.firebaseapp.com",
+    databaseURL: "https://toernooi.firebaseio.com",
+    storageBucket: "project-2271743985645598836.appspot.com",
+  };
+  firebase.initializeApp(config);
+</script>
+    

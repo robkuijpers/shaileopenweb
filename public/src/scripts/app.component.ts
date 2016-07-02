@@ -1,14 +1,21 @@
 import { Component } from '@angular/core';
+import { ROUTER_DIRECTIVES } from '@angular/router';
+import { LoginService }     from './login.service';
 
 @Component({
   selector: 'my-app',
-  template: `<h4>My First Angular 2 App</h4>
-             <!-- Accent-colored raised button with ripple -->
-             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                Button
-             </button>`
+  template: `<h3>{{title}}</h3>
+             <nav>
+               <a [routerLink]="['/dashboard']" routerLinkActive="active">Dashboard</a>
+               <a [routerLink]="['/login']">Login</a>
+             </nav>  
+             <router-outlet></router-outlet>`,
+  directives: [ROUTER_DIRECTIVES],
+  providers: [
+    LoginService
+  ]
 })
 
 export class AppComponent {
-
+  title = 'Hello';
 }

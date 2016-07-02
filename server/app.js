@@ -1,6 +1,5 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var compression = require('compression');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -8,7 +7,9 @@ var bodyParser = require('body-parser');
 var exphbs  = require('express-handlebars');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+
+// REST API's
+var usersRESTServiceAPI = require('./api/authentication');
 
 var app = express();
 
@@ -25,15 +26,29 @@ app.engine('.hbs', exphbs(
   } ));
 
 app.use(logger('dev'));
-app.use(favicon(path.join(__dirname, 'views', 'favicon.ico')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public/dist')));
 app.use(express.static(path.join(__dirname, '..')));
 
+  //  // serve all asset files from necessary directories
+  //   app.use("/scripts", express.static(__dirname + "/distapp/js"));
+  //   app.use("/img", express.static(__dirname + "/app/img"));
+  //   app.use("/css", express.static(__dirname + "/app/css"));
+  
+  //   // any API endpoints
+  //   app.post('/api/v1/auth/login', routes.auth.login);
+
+  //   // serve index.html for all remaining routes, in order to leave routing up to angular
+    // app.all("/*", function(req, res, next) {
+    //     res.sendfile("index.html", { root: __dirname + "/app" });
+    // });
+
 app.use('/', routes);
-app.use('/users', users);
+
+// REST API's
+//app.use('/api/authentication', usersRESTServiceAPI);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

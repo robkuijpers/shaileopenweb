@@ -2,10 +2,12 @@
 // Rob Kuijpers
 // June 2016
 // ************************************************************************
+"use strict";
 
 // To automatically load all plugins use 'gulp-load-plugins':
 // const plugins = require('gulp-load-plugins')();  
 const gulp = require('gulp');
+const gutil = require('gulp-util');
 const sass = require('gulp-sass');
 const browserSync = require('browser-sync').create();
 const autoprefixer = require('gulp-autoprefixer');
@@ -42,6 +44,17 @@ gulp.task('sass', function(){
     .pipe(filesize());
 });
 
+// *** Compile App SASS ***
+const sassAppFiles = 'public/src/scripts/**/*.scss';
+const cssAppDirOut = 'public/dist/scripts/';
+
+gulp.task('sass:app', function(){
+  return gulp.src(sassAppFiles)
+    .pipe(sass()) 
+    .pipe(autoprefixer({ browsers: ['last 2 versions'], cascade: false }))
+    .pipe(minifycss())
+    .pipe(gulp.dest(cssAppDirOut));
+});
 
 // *** Lint and compile Typescript to ES5 ***
 const typescriptFiles = [
@@ -54,7 +67,7 @@ gulp.task('typescript', function() {
   return gulp
     .src(typescriptFiles)
     .pipe(tslint())
-    .pipe(tslint.report('verbose'))
+    .pipe(tslint.report('verbose', {emitError: false}))
     .pipe(sourcemaps.init())
     .pipe(typescript(tscConfig.compilerOptions))
     .pipe(sourcemaps.write('.'))
@@ -92,14 +105,24 @@ gulp.task('copy:fonts', function() {
 const libsDirOut = 'public/dist/libs';
 
 gulp.task('copy:libs', function() {
-  return gulp.src([
-      'node_modules/core-js/client/shim.min.js',
-      'node_modules/zone.js/dist/zone.js',
-      'node_modules/reflect-metadata/Reflect.js',
-      'node_modules/systemjs/dist/system.src.js',
-      'node_modules/material-design-lite/material.min.js',
-    ])
-    .pipe(gulp.dest(libsDirOut));
+
+   gulp.src([      
+          'node_modules/core-js/client/shim.min.js',
+          'node_modules/zone.js/dist/zone.js',
+          'node_modules/reflect-metadata/Reflect.js',
+          'node_modules/systemjs/dist/system.src.js'])
+        .pipe(gulp.dest(libsDirOut + '/angular2'));
+
+    // For now use the nodejs json api.
+    // gulp.src('node_modules/angularfire2/*.js')
+    //     .pipe(gulp.dest(libsDirOut + '/angularfire2'));
+
+    // gulp.src('node_modules/firebase/*.js')
+    //     .pipe(gulp.dest(libsDirOut + '/firebase'));
+
+    return gulp.src('node_modules/material-design-lite/material.min.js')
+        .pipe(gulp.dest(libsDirOut + '/material'));
+
 });
 
 // *** Copy app files ***
@@ -108,6 +131,13 @@ const appFiles = ['public/src/*.js'];
 gulp.task('copy:app', function() {
   return gulp.src(appFiles)
     .pipe(gulp.dest('public/dist'));
+});
+
+const templateFiles = ['public/src/scripts/**/*.html'];
+
+gulp.task('copy:templates', function() {
+  return gulp.src(templateFiles)
+    .pipe(gulp.dest('public/dist/scripts'));
 });
 
 // *** Minify js and css ***
@@ -129,8 +159,10 @@ gulp.task('minify:js', function(){
 // *** Add other files like systemjs.conf.js ? 
 gulp.task('watch', function(){
   gulp.watch(sassFiles, ['sass']).on('change', browserSync.reload); 
+  gulp.watch(sassAppFiles, ['sass:app']).on('change', browserSync.reload); 
   gulp.watch(typescriptFiles, ['typescript']).on('change', browserSync.reload);
-  gulp.watch(appFiles, ['copy:app', 'copy:libs']).on('change', browserSync.reload);  
+  gulp.watch(appFiles, ['copy:app', 'copy:libs']).on('change', browserSync.reload); 
+  gulp.watch(templateFiles, ['copy:templates']).on('change', browserSync.reload);  
   gulp.watch(imageFiles, ['imagemin']).on('change', browserSync.reload);
   gulp.watch(['*.json', '*.js'], ['default']).on('change', browserSync.reload);
 });
@@ -170,11 +202,11 @@ gulp.task('server', function() {
 
 // *** Default task ***
 gulp.task('default', ['clean'], function() {
-    gulp.start('sass', 'typescript', 'imagemin', 'copy:app', 'copy:libs', 'browser-sync', 'watch');
+    gulp.start('sass', 'sass:app', 'typescript', 'imagemin', 'copy:app', 'copy:templates', 'copy:libs', 'browser-sync', 'watch');
 });
 
 
 // *** Dist task ***
 gulp.task('dist', ['clean'], function() {
-    gulp.start('sass', 'typescript', 'imagemin', 'copy:app', 'copy:libs', 'minify:js', 'browser-sync', 'watch');
+    gulp.start('sass', 'sass:app', 'typescript', 'imagemin', 'copy:app', 'copy:templates', 'copy:libs', 'minify:js', 'browser-sync', 'watch');
 });
