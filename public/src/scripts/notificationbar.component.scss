@@ -1,0 +1,28 @@
+// @import '../../../node_modules/material-design-lite/src/material-design-lite.scss';
+
+.notificationbar {
+    color: white;
+    background-color: lightcoral;
+    height: 0;
+    padding-left: 80px;
+    padding-right: 20px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    transition: height ease-in-out 0.5s;
+
+    span {
+        line-height: 34px;
+    }
+
+    i.material-icons {
+        line-height: 34px;
+        color: white;
+        cursor: pointer;
+    }
+
+}
+
+.open {
+    height: 34px;
+}

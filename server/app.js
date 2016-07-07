@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var exphbs  = require('express-handlebars');
 
 var routes = require('./routes/index');
+var api = require('./routes/api');
 
 // REST API's
 var usersRESTServiceAPI = require('./api/authentication');
@@ -45,6 +46,7 @@ app.use(express.static(path.join(__dirname, '..')));
     //     res.sendfile("index.html", { root: __dirname + "/app" });
     // });
 
+app.use('/api', api);
 app.use('/', routes);
 
 // REST API's
@@ -52,7 +54,7 @@ app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  var err = new Error('Not Found: ' + req.originalUrl + ' by Express.');
   err.status = 404;
   next(err);
 });

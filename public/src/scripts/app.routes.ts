@@ -3,7 +3,8 @@ import { LoginComponent } from './login.component';
 import { DashboardComponent } from './dashboard.component';
 
 const routes: RouterConfig = [
-  { path: '', redirectTo: '/dashboard', terminal: true },
+  { path: '', redirectTo: '/login', terminal: true },
+  { path: 'home', redirectTo: '/', terminal: true },
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent }
 ];

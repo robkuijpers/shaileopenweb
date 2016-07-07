@@ -44,14 +44,13 @@ Added typings.index.d.ts to the gulp typescript compile task.
 
 Angular2 5 min quickstart tutorial.
 
-    Improvement: in app.js (express) remove static directory .. and configure systemjs.conf.js 
-    to find files in node_modules or copy the needed files to public/dist/libs.
+    - Improvement: in app.js (express) remove static directory .. and configure systemjs.conf.js to find files in node_modules or copy the needed files to public/dist/libs.
 
 Installed:
 
     npm install materialize-css --save
   
-Switched to MDL because is is more lightweight.
+Switched to MDL because it is more lightweight.
 
     npm install material-design-lite --save
 
@@ -63,41 +62,34 @@ Added angularfire typing to typings.json
 
 Added express compression module. 
 
-List process with port 3000 in use: lsof -i tcp:3000
+Tip: List process with port 3000 in use: 
+
+    lsof -i tcp:3000
 
 Fixed reloading browsers on change in client code.
-
-Next steps:
-    Copy MDL icons + roboto fonts from node_modules to dist.
-    Study SystemJS class loader.
-    Study, configure and use AngularFire2.
-    Study Angular2 Hero Editor Tutorial.
-    Connect to FireBase.
-    Create login screen.
-    Create responsive grid and menu.
-    Minify .js and .css and cache hbs files for production release.
-
 
 AngularFire2 and Firebase
 
     npm install angularfire2
     npm install firebase
     typings install dt~firebase --global
-
-
-
-<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
-<script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-database.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyBVWUl4Rdd_6ssjpJq41IZAYCR46VFF7oM",
-    authDomain: "toernooi.firebaseapp.com",
-    databaseURL: "https://toernooi.firebaseio.com",
-    storageBucket: "project-2271743985645598836.appspot.com",
-  };
-  firebase.initializeApp(config);
-</script>
     
+Removed angularfire2 and firebase from frontend. Create API and use them in nodejs.
+Use JWT for the API.
+
+Added angular routing. 
+
+Used relative paths in components and compile sass to separate css modules.
+
+Next steps:
+
+    - Add MDL for Angular2.
+    - Use MDL icons + Roboto fonts from dist.
+    - Create login screen.
+    - Write Unit tests.
+    - Connect to FireBase.
+    - Study SystemJS class loader.
+    - Study, configure and use FireBase or AngularFire2.
+
+Step 2
+======

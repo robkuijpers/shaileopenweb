@@ -1,0 +1,4 @@
+<div class="notificationbar" [class.open]="notification">
+    <span>{{ notification }}</span>
+    <span (click)="close($event)"><i class="material-icons" role="presentation">clear</i></span>
+</div>    

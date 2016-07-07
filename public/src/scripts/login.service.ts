@@ -8,15 +8,15 @@ export class User {
 }
 
 let users = [
-  new User('admin@admin.com', 'adm9'),
-  new User('user1@gmail.com', 'a23')
+  new User('admin@admin.com', 'admin'),
+  new User('user1@gmail.com', 'user1')
 ];
 
 @Injectable()
 export class LoginService {
 
   constructor( private _router: Router ) {
-
+    //
   }
 
   logout() {
@@ -28,7 +28,7 @@ export class LoginService {
     let authenticatedUser = users.find(u => u.email === user.email);
     if (authenticatedUser) {
       localStorage.setItem('user', JSON.stringify(authenticatedUser));
-      this._router.navigate(['/']);
+      this._router.navigate(['dashboard']);
       return true;
     }
     return false;
@@ -37,7 +37,8 @@ export class LoginService {
 
    checkCredentials() {
     if (localStorage.getItem('user') === null) {
-        this._router.navigate(['Login']);
+        this._router.navigate(['login']);
     }
   }
+
 }

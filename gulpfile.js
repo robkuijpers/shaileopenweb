@@ -31,10 +31,10 @@ gulp.task('clean', function() {
 
 
 // *** Compile SASS ***
-const sassFiles = 'public/src/styles/**/*.scss';
+const sassFiles = ['public/src/styles/**/*.scss'];
 const cssDirOut = 'public/dist/styles';
 
-gulp.task('sass', function(){
+gulp.task('sass:main', function(){
   return gulp.src(sassFiles)
     .pipe(sass()) 
     .pipe(autoprefixer({ browsers: ['last 2 versions'], cascade: false }))
@@ -45,11 +45,12 @@ gulp.task('sass', function(){
 });
 
 // *** Compile App SASS ***
-const sassAppFiles = 'public/src/scripts/**/*.scss';
+const sassMainFile = 'public/src/styles/main.scss';
+const sassComponentFiles = 'public/src/scripts/**/*.scss';
 const cssAppDirOut = 'public/dist/scripts/';
 
-gulp.task('sass:app', function(){
-  return gulp.src(sassAppFiles)
+gulp.task('sass:components', function(){
+  return gulp.src([sassMainFile, sassComponentFiles])
     .pipe(sass()) 
     .pipe(autoprefixer({ browsers: ['last 2 versions'], cascade: false }))
     .pipe(minifycss())
@@ -158,8 +159,8 @@ gulp.task('minify:js', function(){
 // *** Watch files and process on the fly ***
 // *** Add other files like systemjs.conf.js ? 
 gulp.task('watch', function(){
-  gulp.watch(sassFiles, ['sass']).on('change', browserSync.reload); 
-  gulp.watch(sassAppFiles, ['sass:app']).on('change', browserSync.reload); 
+  gulp.watch(sassFiles, ['sass:main']).on('change', browserSync.reload); 
+  gulp.watch(sassComponentFiles, ['sass:components']).on('change', browserSync.reload); 
   gulp.watch(typescriptFiles, ['typescript']).on('change', browserSync.reload);
   gulp.watch(appFiles, ['copy:app', 'copy:libs']).on('change', browserSync.reload); 
   gulp.watch(templateFiles, ['copy:templates']).on('change', browserSync.reload);  
@@ -202,11 +203,11 @@ gulp.task('server', function() {
 
 // *** Default task ***
 gulp.task('default', ['clean'], function() {
-    gulp.start('sass', 'sass:app', 'typescript', 'imagemin', 'copy:app', 'copy:templates', 'copy:libs', 'browser-sync', 'watch');
+    gulp.start('sass:main', 'sass:components', 'typescript', 'imagemin', 'copy:app', 'copy:templates', 'copy:libs', 'browser-sync', 'watch');
 });
 
 
 // *** Dist task ***
 gulp.task('dist', ['clean'], function() {
-    gulp.start('sass', 'sass:app', 'typescript', 'imagemin', 'copy:app', 'copy:templates', 'copy:libs', 'minify:js', 'browser-sync', 'watch');
+    gulp.start('sass:main', 'sass:components', 'typescript', 'imagemin', 'copy:app', 'copy:templates', 'copy:libs', 'minify:js', 'browser-sync', 'watch');
 });
