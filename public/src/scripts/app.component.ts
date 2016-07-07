@@ -10,14 +10,12 @@ import { LoginService } from './login.service';
 @Component({
   selector: 'my-app',
   template: `<div>
-               <my-pageheader></my-pageheader>
-               <my-mainmenu></my-mainmenu>
-               <my-notificationbar></my-notificationbar>
-              </div>
+                <my-pageheader></my-pageheader>
+                <my-mainmenu></my-mainmenu>
+              </div> 
+              <my-notificationbar></my-notificationbar>
               <main>
-                <div>
                   <router-outlet></router-outlet>
-                </div>
               </main>     
               <my-pagefooter></my-pagefooter>`,
   directives: [
