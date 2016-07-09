@@ -10,6 +10,7 @@ const gulp = require('gulp');
 const gutil = require('gulp-util');
 const sass = require('gulp-sass');
 const browserSync = require('browser-sync').create();
+const gls = require('gulp-live-server'); 
 const autoprefixer = require('gulp-autoprefixer');
 const cache = require('gulp-cache');
 const imagemin = require('gulp-imagemin');
@@ -30,7 +31,7 @@ gulp.task('clean', function() {
 });
 
 
-// *** Compile SASS ***
+// *** Compile Generic SASS ***
 const sassFiles = ['public/src/styles/**/*.scss'];
 const cssDirOut = 'public/dist/styles';
 
@@ -75,6 +76,23 @@ gulp.task('typescript', function() {
     .pipe(gulp.dest(javascriptDirOut));  
 });
 
+// *** Lint and compile Typescript unit tests to ES5 ***
+const typescriptTestFiles = [
+     'public/test/**/*.ts'        // !!!!!
+    ,'typings/index.d.ts'         // !!!!!
+  ];
+const javascriptTestDirOut = 'public/test';
+
+gulp.task('typescript:test', function() {
+  return gulp
+    .src(typescriptTestFiles)
+    .pipe(tslint())
+    .pipe(tslint.report('verbose', {emitError: false}))
+    .pipe(sourcemaps.init())
+    .pipe(typescript(tscConfig.compilerOptions))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(javascriptTestDirOut));  
+});
 
 // *** Optimize images ***
 const imageFiles = 'public/src/images/*';
@@ -87,18 +105,22 @@ gulp.task('imagemin', function() {
 });
 
 
-// *** Copy fonts  ***
-// ***** Not used ***** 
-const fontFiles = [
-         'node_modules/roboto-font/scss/*.*',
-         'node_modules/roboto-font/fonts/Roboto/roboto-*.*',
-         'node_modules/material-design-icons/iconfont/*.*'
-      ];
+// *** Copy Material Design Roboto font and Material Design icon font  ***
+const fontFilesRoboto = 'node_modules/roboto-font/fonts/Roboto/roboto-*.*';
+const fontFilesIcons = 'node_modules/material-design-icons/iconfont/*.*';
 const fontsDirOut = 'public/dist/fonts';
 
 gulp.task('copy:fonts', function() {
-  return gulp.src(fontFiles)
-    .pipe(gulp.dest(fontsDirOut));
+  
+  gulp.src('node_modules/roboto-font/css/fonts.css')
+    .pipe(gulp.dest('public/dist/styles'));  
+
+  gulp.src(fontFilesRoboto)
+    .pipe(gulp.dest(fontsDirOut + '/roboto')); 
+
+  return gulp.src(fontFilesIcons)
+    .pipe(gulp.dest(fontsDirOut + '/material-icons'));
+
 });
 
 
@@ -108,11 +130,17 @@ const libsDirOut = 'public/dist/libs';
 gulp.task('copy:libs', function() {
 
    gulp.src([      
-          'node_modules/core-js/client/shim.min.js',
-          'node_modules/zone.js/dist/zone.js',
-          'node_modules/reflect-metadata/Reflect.js',
-          'node_modules/systemjs/dist/system.src.js'])
+          'node_modules/core-js/client/shim.min.js',   // Always loaded in the footer.
+          'node_modules/zone.js/dist/zone.js',         // Always loaded in the footer.
+          'node_modules/reflect-metadata/Reflect.js',  // Always loaded in the footer.
+          'node_modules/systemjs/dist/system.src.js']) // Always loaded in the footer.
         .pipe(gulp.dest(libsDirOut + '/angular2'));
+
+    gulp.src('node_modules/@angular/**/*')
+        .pipe(gulp.dest(libsDirOut + '/@angular'));
+
+    return gulp.src('node_modules/@angular2-material/**/*')
+        .pipe(gulp.dest(libsDirOut + '/@angular2-material'));
 
     // For now use the nodejs json api.
     // gulp.src('node_modules/angularfire2/*.js')
@@ -120,9 +148,6 @@ gulp.task('copy:libs', function() {
 
     // gulp.src('node_modules/firebase/*.js')
     //     .pipe(gulp.dest(libsDirOut + '/firebase'));
-
-    return gulp.src('node_modules/material-design-lite/material.min.js')
-        .pipe(gulp.dest(libsDirOut + '/material'));
 
 });
 
@@ -157,8 +182,7 @@ gulp.task('minify:js', function(){
 
 
 // *** Watch files and process on the fly ***
-// *** Add other files like systemjs.conf.js ? 
-gulp.task('watch', function(){
+gulp.task('watch', function() {
   gulp.watch(sassFiles, ['sass:main']).on('change', browserSync.reload); 
   gulp.watch(sassComponentFiles, ['sass:components']).on('change', browserSync.reload); 
   gulp.watch(typescriptFiles, ['typescript']).on('change', browserSync.reload);
@@ -166,6 +190,11 @@ gulp.task('watch', function(){
   gulp.watch(templateFiles, ['copy:templates']).on('change', browserSync.reload);  
   gulp.watch(imageFiles, ['imagemin']).on('change', browserSync.reload);
   gulp.watch(['*.json', '*.js'], ['default']).on('change', browserSync.reload);
+});
+
+// *** Watch files and process on the fly ***
+gulp.task('watch:test', function() {
+  gulp.watch(typescriptTestFiles, ['typescript:test']);
 });
 
 
@@ -200,14 +229,26 @@ gulp.task('server', function() {
   });
 });
 
+// *** Live server for running jasmine unit tests in the browser ***
+// Open http://localhost:8080/public/test/unit-tests.html
+gulp.task('liveserver', function() {
+  const server = gls.static(['.'], 8080);
+  server.start().then(function(result) {
+    console.log('Live server started for testing.');
+  });  
+});
 
 // *** Default task ***
 gulp.task('default', ['clean'], function() {
-    gulp.start('sass:main', 'sass:components', 'typescript', 'imagemin', 'copy:app', 'copy:templates', 'copy:libs', 'browser-sync', 'watch');
+    gulp.start('sass:main', 'sass:components', 'typescript', 'imagemin', 'copy:app', 'copy:templates', 'copy:libs', 'copy:fonts', 'browser-sync', 'watch');
 });
 
+// *** Test task ***
+gulp.task('test', [], function() {
+    gulp.start('typescript:test', 'liveserver', 'watch:test');
+});
 
 // *** Dist task ***
 gulp.task('dist', ['clean'], function() {
-    gulp.start('sass:main', 'sass:components', 'typescript', 'imagemin', 'copy:app', 'copy:templates', 'copy:libs', 'minify:js', 'browser-sync', 'watch');
+    gulp.start('sass:main', 'sass:components', 'typescript', 'imagemin', 'copy:app', 'copy:templates', 'copy:libs', 'copy:fonts', 'minify:js', 'browser-sync', 'watch');
 });

@@ -93,3 +93,20 @@ Next steps:
 
 Step 2
 ======
+    
+Switched to Angular2 material design.
+Updated system.config.js
+Updated grunt.js
+Added @angular/forms because material design input depends on it.
+
+Added unit tests following angular2 testing guide (installed live-server). 
+One terminal window run: 'npm run test', other window 'gulp test'
+
+Downgraded @angular/form from 0.2.0 to 0.1.0 to support angular material apha-6
+
+Study new @angular http module https://angular.io/docs/ts/latest/tutorial/toh-pt6.html
+
+Study new @angular forms module https://angular.io/docs/ts/latest/cookbook/dynamic-form.html
+
+
+
