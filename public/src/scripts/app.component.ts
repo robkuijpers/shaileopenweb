@@ -7,29 +7,43 @@ import { MdInput } from '@angular2-material/input';
 import { MdToolbar } from '@angular2-material/toolbar';
 import { MD_SIDENAV_DIRECTIVES } from '@angular2-material/sidenav';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
+import { PageHeader } from './pageheader.component';
+import { NotificationBar } from './notificationbar.component';
+import { PageFooter } from './pagefooter.component';
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'my-app',
   template: `<div>
                <md-sidenav-layout fullscreen>
+               
                  <md-sidenav #sidenav>
-                    <md-nav-list>
-                      <a [routerLink]="['{{item.link}}']" md-list-item *ngFor="let item of items">
-                        <md-icon md-list-icon>{{item.icon}}</md-icon>
-                        <span md-line>{{item.name}}</span>
+                    <md-nav-list (click)="sidenav.close()">
+                      <a [routerLink]="[view.path]" md-list-item *ngFor="let view of views">
+                        <md-icon md-list-icon>{{view.icon}}</md-icon>
+                        <span md-line>{{view.name}}</span>
                       </a>
                     </md-nav-list>
                  </md-sidenav>
+
                  <md-toolbar color="primary">
                    <button md-icon-button (click)="sidenav.open()">
                      <md-icon>menu</md-icon>
                    </button>
-                   Shaile Open
+                   {{title}}
+                   <span flex style="flex-grow: 1"></span>
+                   <button md-icon-button>
+                     <md-icon>perm_identity</md-icon>
+                   </button>
                  </md-toolbar>
+
+                 <my-notificationbar></my-notificationbar>
+
+                 <router-outlet></router-outlet>
+
+                 <my-pagefooter></my-pagefooter>
+
                </md-sidenav-layout>  
-             </div>              
-             <div>
-               <router-outlet></router-outlet>
              </div>`,
   directives: [
     ROUTER_DIRECTIVES,
@@ -39,21 +53,69 @@ import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
     MdButton,
     MdToolbar,
     MdIcon,
-    MdInput
+    MdInput,
+    PageHeader,
+    NotificationBar,
+    PageFooter
   ],
   providers: [
-    MdIconRegistry
+    LoginService, MdIconRegistry
   ]
 })
 
 export class AppComponent {
 
-  heroes = ['Windstorm', 'Bombasto', 'Magneta', 'Tornado'];
+  title: String = 'Shaile Open';
 
-  items: [
-    { name: 'Home', icon: 'menu', link: '/' },
-    { name: 'Login', icon: 'menu', link: '/login' },
-    { name: 'Dashboard', icon: 'menu', link: '/dashboard' }
-  ];
+  views: Object[] = [
+      {
+        name: 'Home',
+        icon: 'home',
+        path: 'home',
+        roles: ['user', 'admin']
+      },
+      {
+        name: 'Login',
+        icon: 'perm_identity',
+        path: 'login',
+        roles: ['']
+      },
+      {
+        name: 'Dashboard',
+        icon: 'view_module',
+        path: 'dashboard',
+        roles: ['user', 'admin']
+      },
+      {
+        name: 'Spelers',
+        icon: 'view_module',
+        path: 'dashboard',
+        roles: ['user', 'admin']
+      },
+      {
+        name: 'Wedstrijden',
+        icon: 'view_module',
+        path: 'dashboard',
+        roles: ['user', 'admin']
+      },
+      {
+        name: 'Onderdelen',
+        icon: 'view_module',
+        path: 'dashboard',
+        roles: ['admin']
+      },
+      {
+        name: 'Programma',
+        icon: 'view_module',
+        path: 'dashboard',
+        roles: ['user', 'admin']
+      },
+      {
+        name: 'Instellingen',
+        icon: 'view_module',
+        path: 'dashboard',
+        roles: ['admin']
+      }
+    ];
 
 }

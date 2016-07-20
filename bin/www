@@ -25,10 +25,10 @@ var options = {
 };
 
 /**
- * Create HTTP server.
+ * Create HTTP 1.1 server.
  */
 
-//var server = http.createServer(app);
+// var server = http.createServer(app);
 
 /**
  * Create HTTPS / HTTP/2 Server
@@ -100,5 +100,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('HTTPS Listening on ' + bind);
+  debug('HTTP(S) Listening on ' + bind);
 }

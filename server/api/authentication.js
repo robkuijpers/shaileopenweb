@@ -35,7 +35,7 @@ router.get('/login', function(req, res, next) {
     if(user) {
         res.end(JSON.stringify(user));
     } else {
-        res.status(404).send('Not found');
+        res.status(404).send({ success: false, message: 'User not found' });
     }
 
 });

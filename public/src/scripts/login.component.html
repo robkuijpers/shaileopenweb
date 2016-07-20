@@ -1,1 +1,39 @@
-<h4>Aanmelden</h4>
+<div class="card-container">
+
+    <!--<form #form="ngForm" (ngSubmit)="onSubmit(form.value)" novalidate [formGroup]="form" >-->
+    <form #form="ngForm" (ngSubmit)="onSubmit(form.value)" novalidate>  
+        <md-card>
+            <md-card-title>{{title}}</md-card-title>
+            <md-card-content>
+                <fieldset ngModelGroup="credentials">
+                    <div>  
+                        <md-input type="text" 
+                                  placeholder="Username" 
+                                  required 
+                                  name="username" 
+                                  [(ngModel)]="credentials.username"
+                        ></md-input>
+                    </div>
+                    <div>
+                        <md-input type="password" 
+                                  placeholder="Password" 
+                                  required 
+                                  name="password" 
+                                  [(ngModel)]="credentials.password">
+                        </md-input>
+                    </div>
+                    <div *ngIf="errorMessage" class="error">
+                        {{errorMessage}}
+                    </div>
+                </fieldset>    
+            </md-card-content>
+            <md-card-actions>
+                <div>
+                    <button type="submit" md-button color="primary">Login</button>
+                </div>
+            </md-card-actions>
+        </md-card>
+    </form>
+
+</div>
+

@@ -8,9 +8,9 @@ import { Component } from '@angular/core';
 })
 
 
-export class NotificationBarComponent {
+export class NotificationBar {
 
-    notification = 'Hello';
+    notification = 'Message from outer space!';
 
     constructor() {
         //

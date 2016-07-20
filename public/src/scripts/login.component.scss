@@ -1,18 +1,24 @@
-// @import '../../../node_modules/material-design-lite/src/material-design-lite.scss';
-
-h4 {
-    color: darkgray;
-}
-.login-card-wide.mdl-card {
-    width: 512px;
-}
-
-.login-card-wide > .mdl-card__title {
-    color: #fff;
-    height: 176px;
-    background: url('../assets/demos/welcome_card.jpg') center / cover;
+.card-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height:100%;
 }
 
-.login-card-wide > .mdl-card__menu {
-    color: #fff;
+md-card {
+    width: 400px;
+    box-sizing: border-box;
+
+    md-input {
+        width: 80%;
+    }
+}
+
+fieldset {
+    border: none;
+}
+
+.error {
+    color: red;
 }

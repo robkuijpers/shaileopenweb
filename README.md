@@ -108,5 +108,8 @@ Study new @angular http module https://angular.io/docs/ts/latest/tutorial/toh-pt
 
 Study new @angular forms module https://angular.io/docs/ts/latest/cookbook/dynamic-form.html
 
+Angular2 material samples: https://github.com/justindujardin
+
+Progressive webapps: https://github.com/angular/mobile-toolkit
 
 

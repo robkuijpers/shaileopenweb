@@ -31,13 +31,18 @@ gulp.task('clean', function() {
 });
 
 
-// *** Compile Generic SASS ***
-const sassFiles = ['public/src/styles/**/*.scss'];
+// *** Compile Generic SASS file ***
+const sassMDFiles = 'node_modules/@angular2-material/core/style/core.scss';
+const sassFiles = 'public/src/styles/**/*.scss';
 const cssDirOut = 'public/dist/styles';
 
 gulp.task('sass:main', function(){
-  return gulp.src(sassFiles)
-    .pipe(sass()) 
+  let sassOptions = { 
+    outputStyle: 'expanded', 
+    includePaths: [ 'node_modules/@angular2-material/core/style' ] 
+  }; 
+  return gulp.src([sassFiles])
+    .pipe(sass(sassOptions)) 
     .pipe(autoprefixer({ browsers: ['last 2 versions'], cascade: false }))
     .pipe(filesize())
     .pipe(minifycss())
@@ -45,16 +50,21 @@ gulp.task('sass:main', function(){
     .pipe(filesize());
 });
 
-// *** Compile App SASS ***
+// *** Compile App SASS file for every component ***
 const sassMainFile = 'public/src/styles/main.scss';
 const sassComponentFiles = 'public/src/scripts/**/*.scss';
 const cssAppDirOut = 'public/dist/scripts/';
 
 gulp.task('sass:components', function(){
-  return gulp.src([sassMainFile, sassComponentFiles])
-    .pipe(sass()) 
+  let sassOptions = { 
+    outputStyle: 'expanded', 
+    includePaths: [ 'node_modules/@angular2-material/core/style',
+                    'public/src/styles/main.scss' ] 
+  }; 
+  return gulp.src([sassComponentFiles])
+    .pipe(sass(sassOptions)) 
     .pipe(autoprefixer({ browsers: ['last 2 versions'], cascade: false }))
-    .pipe(minifycss())
+//    .pipe(minifycss())
     .pipe(gulp.dest(cssAppDirOut));
 });
 
@@ -130,11 +140,11 @@ const libsDirOut = 'public/dist/libs';
 gulp.task('copy:libs', function() {
 
    gulp.src([      
-          'node_modules/core-js/client/shim.min.js',   // Always loaded in the footer.
-          'node_modules/zone.js/dist/zone.js',         // Always loaded in the footer.
-          'node_modules/reflect-metadata/Reflect.js',  // Always loaded in the footer.
-          'node_modules/systemjs/dist/system.src.js']) // Always loaded in the footer.
-        .pipe(gulp.dest(libsDirOut + '/angular2'));
+          'node_modules/core-js/client/shim.min.+(js|js.map)',   // Always loaded in the footer.
+          'node_modules/zone.js/dist/zone.+(js|js.map)',         // Always loaded in the footer.
+          'node_modules/reflect-metadata/Reflect.+(js|js.map)',  // Always loaded in the footer.
+          'node_modules/systemjs/dist/system.src.js'])           // Always loaded in the footer.
+        .pipe(gulp.dest(libsDirOut));
 
     gulp.src('node_modules/@angular/**/*')
         .pipe(gulp.dest(libsDirOut + '/@angular'));

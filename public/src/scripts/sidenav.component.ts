@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 })
 
 
-export class SideNavComponent {
+export class SideNav {
 
     constructor() {
         //
